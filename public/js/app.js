@@ -5,7 +5,10 @@
 
 
 var game = ( function() {
-	var trump ={}; //object
+
+	var animate = null;
+
+	var trump = {}; //object
 
 	var bricks = []; //arrays
 
@@ -19,6 +22,9 @@ var game = ( function() {
 		//init trump
 		trump.dom = document.getElementById('trump');
 		trump.name = trump.dom.id;
+
+		trump.dx - 1;
+		trump.dy = 1;
 
 		arena.dom = document.getElementById('game-canvas');
 		arena.name= arena.dom.id;
@@ -40,18 +46,70 @@ var game = ( function() {
 			
 		}//end of loop
 
-	}
+	};
+
+	
+
+	//make a local reference to the animate library.
+	
 
 	function initView() {
 		console.log('in initView');
 
-	}
+		if ( window.animate ) {
+
+			animate = window.animate;
+		}
+		else {
+
+			console.error('animate library not present. game cannot run');
+
+		}
+
+	};
 
 
 	//main gameloop
 	function gameLoop() {
-		console.log('in gameLoop');
-	}
+		//console.log('in gameLoop');
+
+		//console.log('game.animate.move:' + game.animate.move);
+		game.animate.move( trump );
+
+		if ( checkForWin() === true) {
+
+			stop();
+
+			alert('trump has won the white house');
+		}
+
+		
+
+		if ( game.animate.checkForCollision( trump, arena ) === true ) {
+
+			game.animate.bounce( trump );
+		}
+
+		for ( var i = 0; i < bricks.length; i++) {
+
+			
+			if( game.animate.checkForCollision(trump, bricks[i] ) === true ) {
+
+				game.animate.destroy( bricks[i] );
+
+				game.animate.bounce( trump );
+			}
+		}
+	};
+
+	function checkForWin () {
+
+		console.log('in checkForWin()');
+
+		return false;
+
+	};
+
 
 	//function to check if keys are pressed
 	function checkKey(e) {
@@ -63,7 +121,7 @@ var game = ( function() {
 		else if(e.keyCode == '40'){
 			console.log('down arrow pressed');
 		}
-	}
+	};
 
 	var animateId = null;
 
@@ -75,7 +133,33 @@ var game = ( function() {
 
 		document.onkeydown = checkKey;
 
-	}
+		var startButton = document.getElementById( 'start-game' );
+
+		startButton.addEventListener( 'click', function( e ) {
+
+			console.log('clicked start button');
+			start();
+
+			e.preventDefault();
+
+			e.stopPropagation();
+		}, false );
+
+		var stopButton = document.getElementById( 'stop-game' );
+
+		stopButton.addEventListener( 'click', function( e ) {
+
+			console.log('clicked stop button');
+
+			stop();
+
+			e.preventDefault();
+
+			e.stopPropagation();
+
+		}, false );
+
+	};
 
 	function start() {
 		if ( animateId == null) {
@@ -90,7 +174,7 @@ var game = ( function() {
 
 			console.log('starting game');
 		}
-	}
+	};
 
 	function stop() {
 
@@ -98,7 +182,7 @@ var game = ( function() {
 
 		animateId = null;
 		console.log('stop');
-	}
+	};
 
 	function isStarted() {
 		if( animateId !==null ) {
@@ -107,19 +191,22 @@ var game = ( function() {
 		else {
 			return false;
 		}
-	}
+	};
 
 	function init() {
 		console.log('in Init');
 		initModel();
 		initView();
 		initController();
-		start();
+		//start();
 
-	}
+	};
+
+	init();
 
 	return {
 
+		animate: animate,
 		trump: trump,
 		bricks: bricks,
 		arena: arena,

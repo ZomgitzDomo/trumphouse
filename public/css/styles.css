@@ -4,7 +4,29 @@ body {
 	background-color: #aaccaa;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+#ui-elements {
+	width: 700px;
+	padding: 4px;
+	border-left: 2px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+	color: white;
+	font-size: 16px;
+	background-color: #666;
+
+
+}
+
+
+
+/* game elements */
+
 #game-canvas {
+	border: 2px solid black;
 	position: relative;
 	background-image: url('../img/arena/bkgnd_1992.png');
 	width: 700px;
@@ -14,7 +36,7 @@ body {
 #white-house {
 	position: absolute;
 	background-image: url('../img/arena/whitehouse.png');
-	height:300px;
+	height:296px;
 	width:150px;
 	right: 0;
 }
@@ -68,6 +90,7 @@ body {
 	background-image: url('../img/bricks/kasich.png');
 	top:250px;
 	left: 500px;
+	height: 46px;
 }
 
 
